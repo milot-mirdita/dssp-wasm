@@ -1823,14 +1823,20 @@ void MProtein::CalculateSecondaryStructure(bool inPreferPiHelices)
   if (VERBOSE)
     std::cerr << "using " << residues.size() << " residues" << std::endl;
 
+#ifdef HAVE_BOOST_THREAD
   boost::thread t(boost::bind(&MProtein::CalculateAccessibilities, this,
                   boost::ref(residues)));
+#else
+  CalculateAccessibilities(residues);
+#endif
 
   CalculateHBondEnergies(residues);
   CalculateBetaSheets(residues);
   CalculateAlphaHelices(residues, inPreferPiHelices);
 
+#ifdef HAVE_BOOST_THREAD
   t.join();
+#endif
 }
 
 void MProtein::CalculateHBondEnergies(const std::vector<MResidue*>& inResidues)
@@ -2215,11 +2221,14 @@ void MProtein::CalculateAccessibilities(
   if (VERBOSE)
     std::cerr << "Calculate accessibilities" << std::endl;
 
+#ifdef HAVE_BOOST_THREAD
   uint32 nr_of_threads = boost::thread::hardware_concurrency();
   if (nr_of_threads <= 1)
   {
+#endif
     foreach (MResidue* residue, inResidues)
       residue->CalculateSurface(inResidues);
+#ifdef HAVE_BOOST_THREAD
   }
   else
   {
@@ -2238,6 +2247,7 @@ void MProtein::CalculateAccessibilities(
 
     t.join_all();
   }
+#endif
 }
 
 void MProtein::CalculateAccessibility(MResidueQueue& inQueue,

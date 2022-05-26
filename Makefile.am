@@ -1,13 +1,18 @@
-bin_PROGRAMS	=	mkdssp test_readpdb
+bin_PROGRAMS	=	mkdssp
+if USE_BOOST_UNIT_TEST_FRAMEWORK
+bin_PROGRAMS	+=	test_readpdb
+endif
 
 shared_LDADD =	$(BOOST_DATE_TIME_LIB) \
-								$(BOOST_FILESYSTEM_LIB) \
 								$(BOOST_IOSTREAMS_LIB) \
 								$(BOOST_PROGRAM_OPTIONS_LIB) \
 								$(BOOST_REGEX_LIB) \
 								$(BOOST_SYSTEM_LIB) \
-								$(BOOST_THREAD_LIB) \
-								-lpthread
+								$(BOOST_THREAD_LIB)
+
+if USE_BOOST_THREAD
+shared_LDADD	+=	-lpthread
+endif
 
 mkdssp_SOURCES	=	src/dssp.cpp \
 									src/dssp.h \
@@ -27,7 +32,7 @@ mkdssp_SOURCES	=	src/dssp.cpp \
 
 mkdssp_LDADD	=	$(shared_LDADD)
 
-
+if USE_BOOST_UNIT_TEST_FRAMEWORK
 test_readpdb_SOURCES	=	src/iocif.cpp \
 										src/mas.cpp \
 										src/primitives-3d.cpp \
@@ -41,6 +46,7 @@ test_readpdb_SOURCES	=	src/iocif.cpp \
 
 test_readpdb_LDADD	=	$(shared_LDADD) \
 									$(BOOST_UNIT_TEST_FRAMEWORK_LIB)
+endif
 
 AM_CPPFLAGS	=	-std=c++11 \
 							-pedantic \

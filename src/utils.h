@@ -11,7 +11,6 @@
 
 #include "mas.h"
 
-#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/thread.hpp>
@@ -105,6 +104,5 @@ struct stats
 // --------------------------------------------------------------------
 
 void WriteToFD(int inFD, const std::string& inText);
-boost::filesystem::path get_home();
 
 #endif
