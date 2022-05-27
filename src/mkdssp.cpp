@@ -15,7 +15,9 @@
 #include "mas.h"
 #include "structure.h"
 
+#ifdef HAVE_BOOST_PROGRAM_OPTIONS
 #include <boost/program_options.hpp>
+#endif
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 
@@ -35,12 +37,15 @@
 #include <fstream>
 
 
+#ifdef HAVE_BOOST_PROGRAM_OPTIONS
 namespace po = boost::program_options;
+#endif
 namespace io = boost::iostreams;
 namespace ba = boost::algorithm;
 
 //int VERBOSE = 0;
 
+#ifdef HAVE_BOOST_PROGRAM_OPTIONS
 int main(int argc, char* argv[])
 {
   try
@@ -188,4 +193,26 @@ int main(int argc, char* argv[])
 
   return 0;
 }
+#else
 
+int main(int argc, char* argv[]) {
+    std::ifstream in(argv[1],
+            std::ios_base::in | std::ios_base::binary);
+    if (not in.is_open())
+        throw std::runtime_error("No such file");
+
+    // OK, we've got the file, now create a protein
+    MProtein a;
+
+    //if (ba::ends_with(argv[1], ".cif") or ba::ends_with(argv[1], ".mcif"))
+    //    a.ReadmmCIF(in);
+    //else
+        a.ReadPDB(in);
+
+    // then calculate the secondary structure
+    a.CalculateSecondaryStructure();
+
+
+    WriteDSSP(a, std::cout);
+}
+#endif

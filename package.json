@@ -1,0 +1,25 @@
+{
+  "name": "dssp-wasm",
+  "version": "0.0.1",
+  "description": "DSSP port to WASM",
+  "main": "dssp.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milot-mirdita/dssp-wasm.git"
+  },
+  "files": [
+      "dssp.js",
+      "mkdssp.js",
+      "mkdssp.wasm"
+  ],
+  "keywords": [
+    "proteins",
+    "bioinformatics"
+  ],
+  "author": "Milot Mirdita <milot@mirdita.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/milot-mirdita/dssp-wasm/issues"
+  },
+  "homepage": "https://github.com/milot-mirdita/dssp-wasm#readme"
+}
